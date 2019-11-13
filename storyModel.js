@@ -2,7 +2,12 @@
     {
         "headline": "Grace Millane trial: CCTV shows accused wheeling body in suitcase",
         "condensed": "A jury has been shown CCTV of a man accused of murdering a backpacker pushing a suitcase said to contain her body.",
-        "long": "Grace Millane from Wickford, Essex, died the night before her 22nd birthday while travelling in New Zealand. A man went on a date with Ms Millane the day before leaving his Auckland hotel with two suitcases. Prosecutors claim the suitcase was then buried in woodland outside the city and Ms Millane was in one of them. After Ms Millane's death the man washed the rental car and left the shovel at the car wash. He was also seen putting items, believed to be Grace's personal effects, in a bin in an Auckland park.",
+        "long": [
+            "Grace Millane from Wickford, Essex, died the night before her 22nd birthday while travelling in New Zealand.",
+            "A man went on a date with Ms Millane the day before leaving his Auckland hotel with two suitcases.", 
+            "Prosecutors claim the suitcase was then buried in woodland outside the city and Ms Millane was in one of them.",
+            "After Ms Millane's death the man washed the rental car and left the shovel at the car wash. He was also seen putting items, believed to be Grace's personal effects, in a bin in an Auckland park."
+        ],
         "questions": [
             {
                 "question": "Who is the suspect?",
