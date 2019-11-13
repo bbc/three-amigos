@@ -6,11 +6,11 @@
         "questions": [
             {
                 "question": "Who is the suspect?",
-                "answer": "The suspect can't be named for legal reasons but they deny murder."
+                "answer": ["The suspect can't be named for legal reasons but they deny murder."]
             },
             {
                 "question": "Who is Grace Millane?",
-                "answer": "Grace Millane is a University of Lincoln graduate who died on December 1st 2018 while backpacking in Auckland, New Zealand."
+                "answer": ["Grace Millane is a University of Lincoln graduate who died on December 1st 2018 while backpacking in Auckland, New Zealand."]
             }
         ],
         "funFacts": [
@@ -46,6 +46,32 @@
         ],
         "funFacts": [
             "Kensington has the smallest majority of just 20 votes"
+        ]
+    },
+    {
+        "headline": "Australia bushfires: Pregnant firefighter defends decision to fight fires",
+        "condensed": "A 23-year-old pregnant volunteer firefighter has fiercely defended her decision to fight dangerous bushfires that have swept across Australia. Kat Robinson-Williams, who is 14 weeks pregnant, said she received many appeals from worried friends to stop. It prompted a powerful post from her on Instagram where she said she would not just stay behind.",
+        "long": [
+            "A 23-year-old pregnant volunteer firefighter has fiercely defended her decision to fight dangerous bushfires that have swept across Australia.",
+            "Kat Robinson-Williams, who is 14 weeks pregnant, said she received many appeals from worried friends to stop.",
+            "It prompted a powerful post from her on Instagram where she said she would not just stay behind.",
+            "Ms Robinson-Williams has been volunteering with the New South Wales (NSW) Rural Fire Service for 11 years.",
+            "I'm not the first pregnant firefighter and I'm not going to be the last one, she told the BBC. I'm still in a position where I'm able to help so I will.",
+            "Australia is enduring a bushfire crisis that has left three people dead since Friday and burnt more than 200 homes."
+        ],
+        "questions": [
+            {
+                "question": "Is climate change to blame?",
+                "answer": 
+                [
+                    "Bushfires are a regular feature in the Australian calendar, but the blazes in New South Wales and Queensland have not previously occurred on such a scale and so early in the fire season, officials say.",
+                    "This has led many Australians to ask how closely the fires can be linked to climate change.",
+                    "The science around climate change is complex - it's not the cause of bushfires but scientists have long warned that a hotter, drier climate would contribute to Australia's fires becoming more frequent and more intense."
+                ]
+            }
+        ],
+        "funFacts": [
+            ""
         ]
     }
 ]
