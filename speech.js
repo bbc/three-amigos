@@ -1,8 +1,9 @@
 var final_transcript = '';
 var recognizing = false;
 // const emotions = ['sleep', 'thanks', 'hug', 'blush']
-const storyModel = require('storyModel.json');
-  
+let story = {};
+const axios = require('axios');
+
 if ('webkitSpeechRecognition' in window) {
 
 var recognition = new webkitSpeechRecognition();
@@ -88,3 +89,33 @@ function startDictation(event) {
     final_span.innerHTML = '';
     interim_span.innerHTML = '';
 }
+
+async function nextStory(){
+
+    story = await nextStory2();
+    storyText.innerHTML = story.headline;
+    var audio = new Audio(`./headline_${story.index}.wav`);
+    audio.play();
+}
+
+function interested() {
+    storyText.innerHTML = story.long;
+    var audio = new Audio(`./long_${story.index}.wav`);
+    audio.play();
+}
+
+function notInterested() {
+    storyText.innerHTML = story.condensed;
+    var audio = new Audio(`./condensed_${story.index}.wav`);
+    audio.play();
+}
+
+async function nextStory2() {
+    return fetch(`http://localhost:3000/getStory`, {
+      method: 'get'
+    })
+      .then(response => {
+          return response.json()}
+      )
+      .then(result=> result);
+  }
