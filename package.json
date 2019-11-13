@@ -1,0 +1,22 @@
+{
+  "name": "three-amigos",
+  "version": "1.0.0",
+  "description": "Voice news hack day",
+  "main": "speech.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bbc/three-amigos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bbc/three-amigos/issues"
+  },
+  "homepage": "https://github.com/bbc/three-amigos#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

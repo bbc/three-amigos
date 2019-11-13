@@ -1,6 +1,7 @@
 var final_transcript = '';
 var recognizing = false;
 // const emotions = ['sleep', 'thanks', 'hug', 'blush']
+const storyModel = require('storyModel.json');
   
 if ('webkitSpeechRecognition' in window) {
 
@@ -11,6 +12,7 @@ recognition.interimResults = true;
 
 recognition.onstart = function() {
     recognizing = true;
+    console.log(storyModel);
 };
 
 recognition.onerror = function(event) {
