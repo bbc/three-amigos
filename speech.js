@@ -89,7 +89,7 @@ async function handleUserInput(userInput) {
         story = await callGetStory(userInput, number, 'getStory');
         storyText.innerHTML = story.long.join('\n');
         let line = 0;
-        const audio = new Audio(`${prefix}long_${story.index}_${line}.wav`);
+        audio = new Audio(`${prefix}long_${story.index}_${line}.wav`);
         audio.play();
         number += 1
         audio.addEventListener('ended', async () => {
