@@ -1,13 +1,14 @@
 
 
-var express = require('express');
-var app = express();
-var storyModel = require('./storyModel.json')
+const express = require('express');
+const app = express();
+const storyModel = require('./storyModel.json');
 const cors = require('cors')
-var number = 0;
-const { handleEmotion } = require('./emotion');
+const bodyParser = require('body-parser')
+
 app.use(cors());
 app.use(express.static(__dirname + '/www'));
+app.use(bodyParser.json())
 
 app.listen('3000');
 console.log('working on 3000');
@@ -19,16 +20,17 @@ const emotions = {
     'happy': 0
 }
 
-app.get('/getStory', function (req, res) {
-    
+app.post('/nextStory', (req, res) => {
+    console.log(`nextStory`);
+    const { number } = req.body;
     res.send(storyModel[number]);
-    number = number+1;
-})
+});
 
-app.get('/nextStory', function (req, res) {
-    
-    res.send(`hello`);
-})
+app.post('/getStory', (req, res) => {
+    console.log(`getStory`);
+    const { number } = req.body;
+    res.send(storyModel[number]);
+});
 
 app.get('/emotion/:emotion', (req, res) => {
     const { emotion } = req.params;

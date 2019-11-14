@@ -1,4 +1,4 @@
-[
+const storyModel = [
     {
         "index":0,
         "headline": "Grace Millane trial: CCTV shows accused wheeling body in suitcase",

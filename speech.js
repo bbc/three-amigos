@@ -1,8 +1,7 @@
-var final_transcript = '';
 var recognizing = false;
 // const emotions = ['sleep', 'thanks', 'hug', 'blush']
 let story = {};
-const axios = require('axios');
+let number = 0;
 
 if ('webkitSpeechRecognition' in window) {
 
@@ -13,7 +12,6 @@ recognition.interimResults = true;
 
 recognition.onstart = function() {
     recognizing = true;
-    console.log(storyModel);
 };
 
 recognition.onerror = function(event) {
@@ -26,6 +24,7 @@ recognition.onend = function() {
 
 recognition.onresult = function(event) {
     var interim_transcript = '';
+    var final_transcript = '';
     for (var i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
             final_transcript += event.results[i][0].transcript;
@@ -33,11 +32,12 @@ recognition.onresult = function(event) {
             interim_transcript += event.results[i][0].transcript;
         }
     }
-    // matchEmotion(final_transcript);
-    // final_transcript = capitalize(final_transcript);
 
-
-    // user input available in final_transcript
+    if (final_transcript) {
+        handleUserInput(final_transcript);
+    }
+    
+    final_transcript = capitalize(final_transcript);
     final_span.innerHTML = linebreak(final_transcript);
     interim_span.innerHTML = linebreak(interim_transcript);
     };
@@ -45,30 +45,6 @@ recognition.onresult = function(event) {
 
 var two_line = /\n\n/g;
 var one_line = /\n/g;
-
-// function matchEmotion(s) {
-//     s.split(' ').forEach(word => {
-//         console.log(`word=${word}`);
-//         // if (emotions.includes(word)) {
-//         console.log(`emotionMapping=${JSON.stringify(emotionMapping)}`);
-//         if (word in emotionMapping) {
-//             console.log(`${word in emotionMapping}`)
-//             // console.log(`${word} in emotions`)
-//             // setEmoticon(word);
-//         } else {
-//             Object.values(emotionMapping).map(({ words }) => {
-//                 const image = words.filter(e => e === word).map(e => e.image);
-//                 console.log(image)
-//             })
-//         }
-//     })
-// }
-
-// function setEmoticon (emotion) {
-//     const avatar = document.getElementById('avatar');
-//     avatar.src = `assets/emoticon/bunny_${emotion}.gif`;
-//     return;
-// }
 
 function linebreak(s) {
     return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
@@ -90,32 +66,112 @@ function startDictation(event) {
     interim_span.innerHTML = '';
 }
 
-async function nextStory(){
+async function handleUserInput(userInput) {
+    userInput = userInput.toLowerCase();
+    console.log(`userInput=${userInput}`);
+    setEmoticon('neutral');
+    const prefix = 'https://three-amigos-assets.s3-eu-west-1.amazonaws.com/'
+    if (userInput.split(' ').includes('news') || userInput.split(' ').includes('headlines')) {
+        story = await callGetStory(userInput, number, 'getStory');
+        storyText.innerHTML = story.headline;
+        var audio = new Audio(`${prefix}headline_${story.index}.wav`);
+        audio.play();
+    }
+    else if (userInput === 'not interested') {
+        story = await callGetStory(userInput, 'getStory');
+        storyText.innerHTML = story.condensed.join('\n');
+        var audio = new Audio(`${prefix}condensed_${story.index}.wav`);
+        audio.play();
+    } else if (userInput == 'interested' || userInput.split(' ').includes('interesting')) {
+        // setTimeout(() => setEmoticon('hi5', false), 2000);
+        setEmoticon(storyModel[story.index].image, true);
+        story = await callGetStory(userInput, number, 'getStory');
+        storyText.innerHTML = story.long.join('\n');
+        let line = 0;
+        const audio = new Audio(`${prefix}long_${story.index}_${line}.wav`);
+        audio.play();
+        number += 1
+        audio.addEventListener('ended', async () => {
+            if (line < story.long.length) {
+                audio.src = `${prefix}long_${story.index}_${line}.wav`;
+                audio.play();
+                line += 1;
+            }
+            // } else {
+            //     const emotions = await callGetEmotions();
+            //     console.log(`emotions=${JSON.stringify(emotions)}`);
+            //     topEmotion = Object.keys(emotions).reduce((result, emotion) => {
+                  
+            //         console.log(result)
+            //         console.log(emotion)
+            //         return emotions[emotion] > emotions[result] ? emotion : result
+                        
+            //     })
+            // }
+        });
+    } else if (userInput == 'hi' || userInput == 'hello' || userInput == 'hey') {
+        story = await callGetStory(userInput, number, 'nextStory');
+        storyText.innerHTML = story.headline;
+        var audio = new Audio(`${prefix}headline_${story.index}.wav`);
+        audio.play();
+    } else {
+        story = await callGetStory(userInput, number, 'nextStory');
+        storyText.innerHTML = story.headline;
+        var audio = new Audio(`${prefix}headline_${story.index}.wav`);
+        audio.play();
+        number = number < 2 ? number + 1 : 0;
+    } 
+}
 
-    story = await nextStory2();
-    storyText.innerHTML = story.headline;
-    var audio = new Audio(`./headline_${story.index}.wav`);
-    audio.play();
+function setEmoticon (emotion, image) {
+    const avatar = document.getElementById('avatar');
+    avatar.src = image ? emotion : `assets/emoticon/bunny_${emotion}.gif`;
+    return;
 }
 
 function interested() {
     storyText.innerHTML = story.long;
-    var audio = new Audio(`./long_${story.index}.wav`);
+    var audio = new Audio(`${prefix}long_${story.index}.wav`);
     audio.play();
 }
 
 function notInterested() {
     storyText.innerHTML = story.condensed;
-    var audio = new Audio(`./condensed_${story.index}.wav`);
+    var audio = new Audio(`${prefix}condensed_${story.index}.wav`);
     audio.play();
 }
 
-async function nextStory2() {
-    return fetch(`http://localhost:3000/getStory`, {
-      method: 'get'
+async function callGetStory(userInput, number, resource) {
+    return fetch(`http://localhost:3000/${resource}`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ userInput, number })
     })
-      .then(response => {
-          return response.json()}
-      )
-      .then(result=> result);
-  }
+    .then(response => {
+        console.log(JSON.stringify(response))
+        return response.json()
+    })
+    .then(result => {
+        console.log(result)
+        return result
+    });
+}
+
+async function callGetEmotions() {
+    return fetch(`http://localhost:3000/getEmotions`, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+        console.log(JSON.stringify(response))
+        return response.json()
+    })
+    .then(result => {
+        console.log(result)
+        return result
+    });
+}
