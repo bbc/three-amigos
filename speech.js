@@ -2,6 +2,7 @@ var recognizing = false;
 // const emotions = ['sleep', 'thanks', 'hug', 'blush']
 let story = {};
 let number = 0;
+let audio;
 
 if ('webkitSpeechRecognition' in window) {
 
@@ -74,13 +75,13 @@ async function handleUserInput(userInput) {
     if (userInput.split(' ').includes('news') || userInput.split(' ').includes('headlines')) {
         story = await callGetStory(userInput, number, 'getStory');
         storyText.innerHTML = story.headline;
-        var audio = new Audio(`${prefix}headline_${story.index}.wav`);
+        audio = new Audio(`${prefix}headline_${story.index}.wav`);
         audio.play();
     }
     else if (userInput === 'not interested') {
         story = await callGetStory(userInput, 'getStory');
         storyText.innerHTML = story.condensed.join('\n');
-        var audio = new Audio(`${prefix}condensed_${story.index}.wav`);
+        audio = new Audio(`${prefix}condensed_${story.index}.wav`);
         audio.play();
     } else if (userInput == 'interested' || userInput.split(' ').includes('interesting')) {
         // setTimeout(() => setEmoticon('hi5', false), 2000);
@@ -112,12 +113,12 @@ async function handleUserInput(userInput) {
     } else if (userInput == 'hi' || userInput == 'hello' || userInput == 'hey') {
         story = await callGetStory(userInput, number, 'nextStory');
         storyText.innerHTML = story.headline;
-        var audio = new Audio(`${prefix}headline_${story.index}.wav`);
+        audio = new Audio(`${prefix}headline_${story.index}.wav`);
         audio.play();
     } else {
         story = await callGetStory(userInput, number, 'nextStory');
         storyText.innerHTML = story.headline;
-        var audio = new Audio(`${prefix}headline_${story.index}.wav`);
+        audio = new Audio(`${prefix}headline_${story.index}.wav`);
         audio.play();
         number = number < 2 ? number + 1 : 0;
     } 
@@ -131,14 +132,18 @@ function setEmoticon (emotion, image) {
 
 function interested() {
     storyText.innerHTML = story.long;
-    var audio = new Audio(`${prefix}long_${story.index}.wav`);
+    audio = new Audio(`${prefix}long_${story.index}.wav`);
     audio.play();
 }
 
 function notInterested() {
     storyText.innerHTML = story.condensed;
-    var audio = new Audio(`${prefix}condensed_${story.index}.wav`);
+    audio = new Audio(`${prefix}condensed_${story.index}.wav`);
     audio.play();
+}
+
+function stopAudio() {
+    audio.pause();
 }
 
 async function callGetStory(userInput, number, resource) {
