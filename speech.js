@@ -13,7 +13,6 @@ recognition.interimResults = true;
 
 recognition.onstart = function() {
     recognizing = true;
-    console.log(storyModel);
 };
 
 recognition.onerror = function(event) {
@@ -96,12 +95,18 @@ async function nextStory(){
     storyText.innerHTML = story.headline;
     audio = new Audio(`./headline_${story.index}.wav`);
     audio.play();
+    audio.onended= function(){
+        audioFinished()
+    };
 }
 
 function interested() {
     storyText.innerHTML = story.long;
     audio = new Audio(`./long_${story.index}.wav`);
     audio.play();
+    audio.onended= function(){
+        audioFinished()
+    };
 }
 
 function notInterested() {
@@ -109,8 +114,12 @@ function notInterested() {
     audio = new Audio(`./condensed_${story.index}.wav`);
     audio.play();
     audio.onended= function(){
-        alert("The audio has ended");
+        audioFinished()
     };
+}
+
+function audioFinished() {
+
 }
 
 function stopAudio() {
