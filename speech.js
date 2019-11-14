@@ -140,6 +140,7 @@ async function handleUserInput(userInput) {
     } else if(hasQuestion(userInput)){
         var question = getBestQuestion(userInput);
         storyText.innerHTML = question.answer;
+        stopAudio();
         audio = new Audio(`${prefix}answer_${story.index}_${question.index}.wav`);
         audio.play();
 
