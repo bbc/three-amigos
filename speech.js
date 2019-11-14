@@ -70,7 +70,7 @@ function startDictation(event) {
 async function handleUserInput(userInput) {
     userInput = userInput.toLowerCase();
     console.log(`userInput=${userInput}`);
-    setEmoticon('neutral');
+    // setEmoticon('neutral');
     const prefix = 'https://three-amigos-assets.s3-eu-west-1.amazonaws.com/'
     if (userInput.split(' ').includes('news') || userInput.split(' ').includes('headlines')) {
         story = await callGetStory(userInput, number, 'getStory');
@@ -79,14 +79,12 @@ async function handleUserInput(userInput) {
         audio.play();
     }
     else if (userInput === 'not interested') {
-        console.log(story);
         //story = await callGetStory(userInput, number,  'getStory');
         storyText.innerHTML = story.condensed;
         audio = new Audio(`${prefix}condensed_${story.index}.wav`);
         audio.play();
     } else if (userInput == 'interested' || userInput.split(' ').includes('interesting')) {
         // setTimeout(() => setEmoticon('hi5', false), 2000);
-        setEmoticon(storyModel[story.index].image, true);
         // story = await callGetStory(userInput, number, 'getStory');
         storyText.innerHTML = story.long.join('\n');
         let line = 0;
@@ -114,6 +112,7 @@ async function handleUserInput(userInput) {
     } else if (userInput == 'hi' || userInput == 'hello' || userInput == 'hey') {
         story = await callGetStory(userInput, number, 'nextStory');
         storyText.innerHTML = story.headline;
+        setEmoticon(storyModel[story.index].image, true);
         audio = new Audio(`${prefix}headline_${story.index}.wav`);
         audio.play();
         number += 1
@@ -130,6 +129,7 @@ async function handleUserInput(userInput) {
 
         console.log(story);
         storyText.innerHTML = story.headline;
+        setEmoticon(storyModel[story.index].image, true);
         audio = new Audio(`${prefix}headline_${story.index}.wav`);
         audio.play();
         number = number < 2 ? number + 1 : 0;
