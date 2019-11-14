@@ -80,19 +80,19 @@ async function handleUserInput(userInput) {
     }
     else if (userInput === 'not interested') {
         console.log(story);
-        story = await callGetStory(userInput, number,  'getStory');
+        //story = await callGetStory(userInput, number,  'getStory');
         storyText.innerHTML = story.condensed;
         audio = new Audio(`${prefix}condensed_${story.index}.wav`);
         audio.play();
     } else if (userInput == 'interested' || userInput.split(' ').includes('interesting')) {
         // setTimeout(() => setEmoticon('hi5', false), 2000);
         setEmoticon(storyModel[story.index].image, true);
-        story = await callGetStory(userInput, number, 'getStory');
+        // story = await callGetStory(userInput, number, 'getStory');
         storyText.innerHTML = story.long.join('\n');
         let line = 0;
         audio = new Audio(`${prefix}long_${story.index}_${line}.wav`);
         audio.play();
-        number += 1
+        //number += 1
         audio.addEventListener('ended', async () => {
             if (line < story.long.length) {
                 audio.src = `${prefix}long_${story.index}_${line}.wav`;
@@ -116,6 +116,8 @@ async function handleUserInput(userInput) {
         storyText.innerHTML = story.headline;
         audio = new Audio(`${prefix}headline_${story.index}.wav`);
         audio.play();
+        number += 1
+
     } else if(hasQuestion(userInput)){
         var question = getBestQuestion(userInput);
         storyText.innerHTML = question.answer;
@@ -124,6 +126,8 @@ async function handleUserInput(userInput) {
 
     } else {
         story = await callGetStory(userInput, number, 'nextStory');
+        // number += 1
+
         console.log(story);
         storyText.innerHTML = story.headline;
         audio = new Audio(`${prefix}headline_${story.index}.wav`);
