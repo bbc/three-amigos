@@ -12,10 +12,14 @@
         "questions": [
             {
                 "question": "Who is the suspect?",
+                "index": 0,
+                "keywords":["who","suspect", "murderer", "killer"],
                 "answer": ["The suspect can't be named for legal reasons but they deny murder."]
             },
             {
                 "question": "Who is Grace Millane?",
+                "index": 1,
+                "keywords":["who", "grace", "millane", "victim"],
                 "answer": ["Grace Millane is a University of Lincoln graduate who died on December 1st 2018 while backpacking in Auckland, New Zealand."]
             }
         ],
@@ -38,6 +42,8 @@
         "questions": [
             {
                 "question": "Why would a candidate withdraw?",
+                "index": 0,
+                "keywords":["why","candidate", "withdraw"],
                 "answer": 
                 [
                     "In a general election, the UK's voters are invited to choose an MP for their area - one of 650 constituencies.",
@@ -68,6 +74,8 @@
         "questions": [
             {
                 "question": "Is climate change to blame?",
+                "index": 0,
+                "keywords":["climate", "change"],
                 "answer": 
                 [
                     "Bushfires are a regular feature in the Australian calendar, but the blazes in New South Wales and Queensland have not previously occurred on such a scale and so early in the fire season, officials say.",

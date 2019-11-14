@@ -79,8 +79,9 @@ async function handleUserInput(userInput) {
         audio.play();
     }
     else if (userInput === 'not interested') {
-        story = await callGetStory(userInput, 'getStory');
-        storyText.innerHTML = story.condensed.join('\n');
+        console.log(story);
+        story = await callGetStory(userInput, number,  'getStory');
+        storyText.innerHTML = story.condensed;
         audio = new Audio(`${prefix}condensed_${story.index}.wav`);
         audio.play();
     } else if (userInput == 'interested' || userInput.split(' ').includes('interesting')) {
@@ -115,13 +116,52 @@ async function handleUserInput(userInput) {
         storyText.innerHTML = story.headline;
         audio = new Audio(`${prefix}headline_${story.index}.wav`);
         audio.play();
+    } else if(hasQuestion(userInput)){
+        var question = getBestQuestion(userInput);
+        storyText.innerHTML = question.answer;
+        audio = new Audio(`${prefix}answer_${story.index}_${question.index}.wav`);
+        audio.play();
+
     } else {
         story = await callGetStory(userInput, number, 'nextStory');
+        console.log(story);
         storyText.innerHTML = story.headline;
         audio = new Audio(`${prefix}headline_${story.index}.wav`);
         audio.play();
         number = number < 2 ? number + 1 : 0;
     } 
+}
+
+function hasQuestion(userInput){
+    var returnvalue = false
+    story.questions.forEach(element => {
+        element.keywords.filter(word => {
+            var array = userInput.split(' ');
+            if(array.includes(word)){
+                returnvalue = true;
+            }
+        })
+    })
+    return returnvalue;
+}
+
+function getBestQuestion(userInput){
+    var question = {}
+    var noMatches = 0;
+    story.questions.forEach(element => {
+        eachNoMatches = 0;
+        element.keywords.filter(word => {
+            var array = userInput.split(' ');
+            if(array.includes(word)){
+                eachNoMatches +=1;
+            }
+        })
+        if(eachNoMatches > noMatches){
+            question = element;
+            noMatches = eachNoMatches
+        }
+    })
+    return question;
 }
 
 function setEmoticon (emotion, image) {
