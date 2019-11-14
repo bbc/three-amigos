@@ -2,7 +2,7 @@ var final_transcript = '';
 var recognizing = false;
 // const emotions = ['sleep', 'thanks', 'hug', 'blush']
 let story = {};
-const axios = require('axios');
+let audio;
 
 if ('webkitSpeechRecognition' in window) {
 
@@ -94,21 +94,30 @@ async function nextStory(){
 
     story = await nextStory2();
     storyText.innerHTML = story.headline;
-    var audio = new Audio(`./headline_${story.index}.wav`);
+    audio = new Audio(`./headline_${story.index}.wav`);
     audio.play();
 }
 
 function interested() {
     storyText.innerHTML = story.long;
-    var audio = new Audio(`./long_${story.index}.wav`);
+    audio = new Audio(`./long_${story.index}.wav`);
     audio.play();
 }
 
 function notInterested() {
     storyText.innerHTML = story.condensed;
-    var audio = new Audio(`./condensed_${story.index}.wav`);
+    audio = new Audio(`./condensed_${story.index}.wav`);
     audio.play();
+    audio.onended= function(){
+        alert("The audio has ended");
+    };
 }
+
+function stopAudio() {
+    console.log("stopped");
+    audio.pause();
+}
+
 
 async function nextStory2() {
     return fetch(`http://localhost:3000/getStory`, {
