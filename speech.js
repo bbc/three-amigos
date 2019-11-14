@@ -83,7 +83,7 @@ async function handleUserInput(userInput) {
         //story = await callGetStory(userInput, number,  'getStory');
         storyText.innerHTML = story.condensed;
         audio = new Audio(`${prefix}condensed_${story.index}.wav`);
-        audio.play();
+        audio.play(); 
     } else if (userInput == 'interested' || userInput.split(' ').includes('interesting')) {
         // setTimeout(() => setEmoticon('hi5', false), 2000);
         setEmoticon(storyModel[story.index].image, true);
@@ -98,18 +98,38 @@ async function handleUserInput(userInput) {
                 audio.src = `${prefix}long_${story.index}_${line}.wav`;
                 audio.play();
                 line += 1;
+            } else {
+                const emotions = await callGetEmotions();
+                console.log(`emotions=${JSON.stringify(emotions)}`);
+                emotions['neutral'] = 0;
+                topEmotion = Object.keys(emotions).reduce((result, emotion) => {
+                    return emotions[emotion] > emotions[result] ? emotion : result  
+                });
+                console.log(topEmotion)
+                if (topEmotion != 'happy') {
+                    nextStoryIndex = story.index+1;
+                    audio = new Audio(`${prefix}bored.wav`);
+                    audio.play();
+                    // audio.pause();
+                    audio.addEventListener('ended', async () => {
+                        story = await callGetStory('next', nextStoryIndex, 'nextStory');
+                        storyText.innerHTML = story.headline;
+                        audio = new Audio(`${prefix}headline_${nextStoryIndex}.wav`);
+                        audio.play();
+                    }) 
+                } else {
+                    nextStoryIndex = story.index+1;
+                    audio = new Audio(`${prefix}happy.wav`);
+                    audio.play();
+                    // audio.pause();
+                    audio.addEventListener('ended', async () => {
+                        story = await callGetStory('next', nextStoryIndex, 'nextStory');
+                        storyText.innerHTML = story.headline;
+                        audio = new Audio(`${prefix}headline_${nextStoryIndex}.wav`);
+                        audio.play();
+                    })
+                }
             }
-            // } else {
-            //     const emotions = await callGetEmotions();
-            //     console.log(`emotions=${JSON.stringify(emotions)}`);
-            //     topEmotion = Object.keys(emotions).reduce((result, emotion) => {
-                  
-            //         console.log(result)
-            //         console.log(emotion)
-            //         return emotions[emotion] > emotions[result] ? emotion : result
-                        
-            //     })
-            // }
         });
     } else if (userInput == 'hi' || userInput == 'hello' || userInput == 'hey') {
         story = await callGetStory(userInput, number, 'nextStory');
